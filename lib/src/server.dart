@@ -20,12 +20,15 @@ Future<void> _run(SentryClient sentry) async {
 
   var client = PubClient(httpClient);
 
+  final port = int.tryParse(Platform.environment['PORT'] ?? '') ?? 31337;
   var server = await HttpServer.bind(
-    InternetAddress.loopbackIPv4,
-    31337,
+    Platform.environment['ENVIRONMENT'] == 'prod'
+        ? InternetAddress.anyIPv4
+        : InternetAddress.loopbackIPv4,
+    port,
   );
 
-  print('Listening on localhost:${server.port}');
+  print('Listening on http://localhost:${server.port}');
 
   int counter = 0;
   await for (final request in server) {
