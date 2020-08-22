@@ -10,3 +10,6 @@ environment:
 dependencies:
   xpath: ^0.1.0
   sentry: ^3.0.0
+
+dev_dependencies:
+  pedantic: ^1.9.2

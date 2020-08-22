@@ -1,3 +1,4 @@
+/// Creates an SVG with the dart logo, [title] and [value].
 String svg(String title, String value) {
   if (title == null || value == null) {
     throw Exception("Title and value are required");

@@ -1,9 +1,9 @@
-// Potential to become part of the Sentry Dart SDK API:
 import 'dart:async';
 import 'dart:isolate';
 
 import 'package:sentry/sentry.dart';
 
+/// Potential to become part of the Sentry Dart SDK API.
 class Sentry {
   static SentryClient currentClient;
   static Future<void> init(

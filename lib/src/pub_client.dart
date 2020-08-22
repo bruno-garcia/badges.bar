@@ -8,13 +8,16 @@ import 'package:xpath/xpath.dart';
 
 import 'base.dart';
 
+/// A pub.dev client that is able to retrieve a packages' Pub Scores.
 class PubClient {
   HttpClient httpClient;
 
+  /// Creates an instance of [PubClient] using an optional [HttpClient].
   PubClient([HttpClient httpClient]) {
     this.httpClient ??= HttpClient();
   }
 
+  /// Fetches the packages' score from pub.dev.
   Future<Score> getScore(String name) async {
     // Even though the scores are available in any detail page of the package,
     // the 'score' page is the best candidate becase the size doesn't vary.
@@ -29,7 +32,7 @@ class PubClient {
           Event(message: "URL $url fetching returned ${response.statusCode}"));
     }
 
-    final buffer = new StringBuffer();
+    final buffer = StringBuffer();
 
     // Can I push raw data and encode on Isolate?
     await for (var content in response.transform(Utf8Decoder())) {
@@ -66,13 +69,20 @@ class PubClient {
   }
 }
 
+/// Scores of a package on pub.dev.
 class Score {
   const Score(this.likes, this.points, this.popularity);
 
+  /// Package 'Likes'.
   final int likes;
+
+  /// Package 'Pub Points'.
   final int points;
+
+  /// Package 'Popularity'.
   final int popularity;
 
+  /// Returns the numeric value of the specified [type] from [scoreTypes].
   int getValueByType(String type) {
     if (type == scoreTypes[0]) {
       return likes;
