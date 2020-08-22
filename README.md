@@ -1,4 +1,4 @@
-# badges.bar - Badges for Dart and Flutter packages on pub.dev
+# Badges for Dart and Flutter packages
 
 [![likes](https://badges.bar/badges_bar/likes)](https://pub.dev/packages/badges_bar/score) [![popularity](https://badges.bar/badges_bar/popularity)](https://pub.dev/packages/badges_bar/score) [![pub points](https://badges.bar/badges_bar/pub%20points)](https://pub.dev/packages/badges_bar/score)
 

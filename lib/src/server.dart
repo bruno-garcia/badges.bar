@@ -21,22 +21,27 @@ Future<void> _run(SentryClient sentry) async {
   var client = PubClient(httpClient);
 
   final port = int.tryParse(Platform.environment['PORT'] ?? '') ?? 31337;
-  var server = await HttpServer.bind(
-    Platform.environment['ENVIRONMENT'] == 'prod'
-        ? InternetAddress.anyIPv4
-        : InternetAddress.loopbackIPv4,
-    port,
-  );
+  var address =
+      isProduction ? InternetAddress.anyIPv4 : InternetAddress.loopbackIPv4;
+  var server = await HttpServer.bind(address, port);
 
-  print('Listening on http://localhost:${server.port}');
+  print(
+      'Running (prod:$isProduction): http://${address.address}:${server.port}');
 
   int counter = 0;
   await for (final request in server) {
     try {
-      final current = counter++;
-      print('Starting to serving request: $current');
-      _serve(request, client)
-          .whenComplete(() => print('Done serving request: $current'));
+      final serveFuture = _serve(request, client);
+      if (!isProduction) {
+        final current = counter++;
+        print('Starting to serving request: $current');
+        serveFuture
+            .catchError((e, s) => print("$e\n$s"))
+            .whenComplete(() => print('Done serving request: $current'));
+      } else {
+        serveFuture.catchError((e, s) async =>
+            await sentry.captureException(exception: e, stackTrace: s));
+      }
     } catch (e, s) {
       await sentry.captureException(exception: e, stackTrace: s);
     }
@@ -57,11 +62,12 @@ Future<void> _serve(HttpRequest request, PubClient client) async {
         port: request.requestedUri.port,
         scheme: request.requestedUri.scheme));
   } else {
+    request.response.headers.contentType = contentTypeSvg;
+    request.response.headers.add('Cache-Control',
+        'public, max-age=3600, stale-while-revalidate=30, stale-if-error=86400');
+
     final scoreType = request.requestedUri.pathSegments.last;
     final package = request.requestedUri.pathSegments.reversed.skip(1).first;
-
-    request.response.headers.contentType = contentTypeSvg;
-    request.response.headers.add('Cache-Control', 'max-age=3600');
 
     final score = await client.getScore(package);
     request.response
@@ -73,3 +79,5 @@ Future<void> _serve(HttpRequest request, PubClient client) async {
 
 final contentTypeSvg = new ContentType("image", "svg+xml");
 final index = File('web/index.html');
+
+get isProduction => Platform.environment['ENVIRONMENT'] == 'prod';
