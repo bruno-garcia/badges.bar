@@ -2,15 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:badges_bar/src/pub_client.dart';
+import 'package:badges_bar/src/sentry.dart';
 import 'package:sentry/sentry.dart';
 import 'package:http/http.dart' as http;
 
-import 'sentry.dart';
-import 'base.dart';
-import 'svg.dart';
+import 'package:badges_bar/badges_bar.dart';
 
 /// Starts a server that generates SVG badges for pub.dev scores.
-Future<void> start() async {
+Future<void> main() async {
   Sentry.init(
       "https://09a6dc7f166e467793a5d2bc7c7a7df2@o117736.ingest.sentry.io/1857674",
       (SentryClient sentry) => _run(sentry));
