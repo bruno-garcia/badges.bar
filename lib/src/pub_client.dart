@@ -1,20 +1,17 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
-import 'package:badges_bar/src/sentry.dart';
-import 'package:sentry/sentry.dart';
+import 'package:http/http.dart';
 import 'package:xpath/xpath.dart';
 
 import 'base.dart';
 
 /// A pub.dev client that is able to retrieve a packages' Pub Scores.
 class PubClient {
-  HttpClient httpClient;
+  BaseClient httpClient;
 
   /// Creates an instance of [PubClient] using an optional [HttpClient].
-  PubClient([HttpClient httpClient]) {
-    this.httpClient ??= HttpClient();
+  PubClient([BaseClient this.httpClient]) {
+    this.httpClient ??= Client();
   }
 
   /// Fetches the packages' score from pub.dev.
@@ -23,31 +20,30 @@ class PubClient {
     // the 'score' page is the best candidate becase the size doesn't vary.
     final url = Uri.parse(
         'https://pub.dev/packages/${Uri.encodeComponent(name)}/score');
-    var request = await httpClient.getUrl(url);
+    var streamedResponse =
+        await httpClient.send(Request('GET', url)..followRedirects = false);
+    var response = await Response.fromStream(streamedResponse);
 
-    var response = await request.close();
-    if (response.statusCode != 200) {
-      print(response);
-      await Sentry.captureEvent(
-          Event(message: "URL $url fetching returned ${response.statusCode}"));
+    // Packages that don't exist result in a redirect to the search page.
+    if (streamedResponse.statusCode == 303) {
+      return null;
     }
 
-    final buffer = StringBuffer();
-
-    // Can I push raw data and encode on Isolate?
-    await for (var content in response.transform(Utf8Decoder())) {
-      buffer.write(content);
+    if (streamedResponse.statusCode != 200) {
+      throw ("URL $url fetching returned ${streamedResponse.statusCode}");
     }
 
-    return _parseScore(buffer.toString());
+    return _parseScore(response.body);
   }
 
   Future<Score> _parseScore(String body) async {
+    if (body == null || body == "") {
+      throw ('Can\'t parse body for Scores because it\'s empty.');
+    }
     var figures = ETree.fromString(body);
-    var scores = figures.xpath('//*[@class="score-key-figures"]')[0];
+    var scores = figures.xpath('//*[@class="score-key-figures"]')?.first;
     if (scores == null) {
-      throw Exception(
-          'Expected div with class \'score-key-figures\' not found.');
+      throw ('Expected div with class \'score-key-figures\' not found.');
     }
 
     assert(scoreTypes.length == 3);
@@ -59,8 +55,7 @@ class PubClient {
       var valueLabel =
           scores.children[i]?.children[1]?.xpath('/text()')[0]?.name;
       if (value == null || valueLabel != scoreTypes[i]) {
-        throw Exception(
-            'Expected \'${scoreTypes[i]}\' not found. Main div: $scores');
+        throw ('Expected \'${scoreTypes[i]}\' not found.');
       }
       scoreValues[i] = value;
     }
@@ -91,6 +86,6 @@ class Score {
     } else if (type == scoreTypes[2]) {
       return popularity;
     }
-    throw Exception("Type \'$type\' is not supported");
+    throw ("Type \'$type\' is not supported");
   }
 }

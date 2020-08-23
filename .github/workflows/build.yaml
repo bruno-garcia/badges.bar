@@ -1,0 +1,42 @@
+name: build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+defaults:
+  run:
+    shell: bash
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+        - uses: actions/checkout@v2
+        - uses: cedx/setup-dart@v2
+        - name: pub get
+          run: pub get
+        - name: Test on ${{ matrix.target }}
+          run: pub run test test/*
+  package-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: axel-op/dart-package-analyzer@v2
+        id: analysis
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check scores
+        # TODO: Once 1.0.0 lands, change min maintenance points to 100
+        run: |
+          MAINTENANCE_SCORE=${{ steps.analysis.outputs.maintenance }}
+          HEALTH_SCORE=${{ steps.analysis.outputs.health }}
+          if (( $(echo "$MAINTENANCE_SCORE < 90" | bc) )) || (( $(echo "$HEALTH_SCORE < 100" | bc) ))
+          then
+            echo "Scores must be min 90 for maintenance (until 1.0 ships), 100 for health."
+            exit 1
+          fi
