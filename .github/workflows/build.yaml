@@ -9,17 +9,19 @@ defaults:
     shell: bash
 jobs:
   build:
-    name: Build on ${{ matrix.os }}
+    name: Build ${{matrix.sdk}} on ${{matrix.os}}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        sdk: [beta, dev, stable]
     steps:
-        - uses: actions/checkout@v2
         - uses: cedx/setup-dart@v2
-        - name: pub get
-          run: pub get
+          with:
+            release-channel: ${{ matrix.sdk }}
+        - uses: actions/checkout@v2
+        - run: pub get
         - name: Test on ${{ matrix.target }}
           run: pub run test test/*
   package-analysis:
