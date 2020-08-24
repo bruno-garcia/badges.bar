@@ -4,4 +4,4 @@ library badges_bar;
 export 'src/base.dart';
 export 'src/pub_client.dart';
 export 'src/svg.dart';
-export 'src/sentry.dart';
+export 'src/sentry/sentry.dart';

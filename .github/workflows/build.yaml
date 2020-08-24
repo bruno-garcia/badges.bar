@@ -14,7 +14,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        # TODO: cedx/setup-dart@v2 doesn't work on Windows (doesn't add pub to the PATH?)
+        # os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
         sdk: [beta, dev, stable]
     steps:
         - uses: cedx/setup-dart@v2
