@@ -18,6 +18,12 @@ jobs:
         # os: [ubuntu-latest, windows-latest, macos-latest]
         os: [ubuntu-latest, macos-latest]
         sdk: [beta, dev, stable]
+        exclude:
+          # Bad state: Could not run tests with Observatory enabled. Try setting a different port with --port option.
+          - os: ubuntu-latest
+            sdk: beta
+          - os: macos-latest
+            sdk: beta
     steps:
         - uses: cedx/setup-dart@v2
           with:
