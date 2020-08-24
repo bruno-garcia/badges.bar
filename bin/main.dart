@@ -33,22 +33,21 @@ Future<void> _run(SentryClient sentry) async {
       try {
         final serveFuture = _serve(request, client);
         if (isProduction) {
-          serveFuture.catchError((dynamic e, dynamic s) async {
+          unawaited(serveFuture.catchError((dynamic e, dynamic s) async {
             request.response.trySetServerError();
             return await sentry.captureException(exception: e, stackTrace: s);
-          }).whenComplete(() => request.response.close());
+          }).whenComplete(() => request.response.close()));
         } else {
           final current = counter++;
           print('Starting to serve request: $current');
-          serveFuture.catchError((dynamic e, dynamic s) {
+          unawaited(serveFuture.catchError((dynamic e, dynamic s) {
             print('$e\n$s');
             request.response.trySetServerError();
           }).whenComplete(() {
             print('Done serving request: $current');
             return request.response.close();
-          });
+          }));
         }
-        unawaited(serveFuture);
       } catch (e, s) {
         await sentry.captureException(exception: e, stackTrace: s);
       }
