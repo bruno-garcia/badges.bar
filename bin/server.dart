@@ -101,3 +101,5 @@ extension HttpResponseExtensions on HttpResponse {
     }
   }
 }
+
+bool get isProduction => Platform.environment['ENVIRONMENT'] == 'prod';
