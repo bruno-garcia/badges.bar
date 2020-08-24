@@ -1,1 +1,4 @@
 .dart_tool
+coverage/
+coverage_badge.svg
+test/.test_coverage.dart

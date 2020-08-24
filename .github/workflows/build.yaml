@@ -28,6 +28,9 @@ jobs:
           run: pub run test -p vm test/*
         - name: Test on Chrome
           run: pub run test -p chrome test/*
+        - name: Collect code coverage
+          run: pub run test_coverage
+        - uses: codecov/codecov-action@v1
         - run: dartfmt -n --set-exit-if-changed ./
         - run: dartanalyzer --fatal-warnings ./
   package-analysis:
