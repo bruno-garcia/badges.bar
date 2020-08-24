@@ -1,6 +1,7 @@
-# badges.bar - Badges for Dart and Flutter packages on pub.dev
+# Badges for Dart and Flutter packages
 
-[![likes](https://badges.bar/badges_bar/likes)](https://pub.dev/packages/badges_bar/score) [![popularity](https://badges.bar/badges_bar/popularity)](https://pub.dev/packages/badges_bar/score) [![pub points](https://badges.bar/badges_bar/pub%20points)](https://pub.dev/packages/badges_bar/score)
+[![build](https://github.com/bruno-garcia/badges.bar/workflows/build/badge.svg?branch=main)](https://github.com/bruno-garcia/badges.bar/actions?query=branch%3Amain) 
+[![coverage](https://codecov.io/gh/bruno-garcia/badges.bar/branch/main/graph/badge.svg)](https://codecov.io/gh/bruno-garcia/badges.bar) [![likes](https://badges.bar/badges_bar/likes)](https://pub.dev/packages/badges_bar/score) [![popularity](https://badges.bar/badges_bar/popularity)](https://pub.dev/packages/badges_bar/score) [![pub points](https://badges.bar/badges_bar/pub%20points)](https://pub.dev/packages/badges_bar/score)
 
 ## Using badges.bar
 

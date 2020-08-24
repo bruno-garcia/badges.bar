@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../lib/badges_bar.dart';
+import 'package:badges_bar/badges_bar.dart';
 
 Future<void> main() async {
   // Render a SVG badge with the Dart logo:

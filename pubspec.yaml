@@ -9,4 +9,10 @@ environment:
 
 dependencies:
   xpath: ^0.1.0
+  http: ^0.12.2
   sentry: ^3.0.0
+
+dev_dependencies:
+  test: ^1.15.3
+  test_coverage: ^0.4.2
+  pedantic: ^1.9.2
