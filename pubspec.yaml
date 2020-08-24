@@ -11,7 +11,7 @@ dependencies:
   xpath: ^0.1.0
   http: ^0.12.2
   sentry: ^3.0.0
-  pedantic: ^1.9.2
 
 dev_dependencies:
   test: ^1.15.3
+  pedantic: ^1.9.2
