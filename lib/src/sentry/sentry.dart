@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:sentry/sentry.dart';
-import 'default_integrations.dart'
-    if (dart.library.io) 'io_integrations.dart.dart';
+import 'default_integrations.dart' if (dart.library.io) 'io_integrations.dart';
 
 /// Potential to become part of the Sentry Dart SDK API.
 mixin Sentry {

@@ -2,7 +2,7 @@ import 'dart:isolate';
 
 import 'package:sentry/sentry.dart';
 
-void install(SentryClient client) {
+void installIntegrations(SentryClient client) {
   Isolate.current.addSentryErrorListener(client);
 }
 

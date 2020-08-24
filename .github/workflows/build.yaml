@@ -24,8 +24,11 @@ jobs:
             release-channel: ${{ matrix.sdk }}
         - uses: actions/checkout@v2
         - run: pub get
-        - name: Test on ${{ matrix.target }}
-          run: pub run test test/*
+        - run: dartfmt -n --set-exit-if-changed ./
+        - name: Test on Dart VM
+          run: pub run test -p vm test/*
+        - name: Test on Chrome
+          run: pub run test -p chrome test/*
   package-analysis:
     runs-on: ubuntu-latest
     steps:
