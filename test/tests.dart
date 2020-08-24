@@ -23,21 +23,23 @@ void main() {
     });
     test('pub.dev changed score labels, throws error', () async {
       final sut = PubClient(MockClient((r) async => _differentLabelsResponse));
-      expect(() => sut.getScore('badges_bar'),
-          throwsA(predicate((e) => e == 'Expected \'likes\' not found.')));
-    });
-    test('pub.dev changed score layout, throws error', () async {
-      final sut = PubClient(MockClient((r) async => Response("<div />", 200)));
       expect(
           () => sut.getScore('badges_bar'),
-          throwsA(predicate((e) =>
+          throwsA(
+              predicate((String e) => e == 'Expected \'likes\' not found.')));
+    });
+    test('pub.dev changed score layout, throws error', () async {
+      final sut = PubClient(MockClient((r) async => Response('<div />', 200)));
+      expect(
+          () => sut.getScore('badges_bar'),
+          throwsA(predicate((String e) =>
               e ==
               'Expected div with class \'score-key-figures\' not found.')));
     });
     test('package name is URI encoded', () async {
       final expectedUri = Uri.parse(
           'https://pub.dev/packages/..%2F..%2Fmy-packages%3F%F0%9F%94%93%3D/score');
-      Uri actualUri = null;
+      Uri actualUri;
       final mockHttpClient = MockClient((r) async {
         actualUri = r.url;
         return _validResponse;
@@ -47,26 +49,26 @@ void main() {
       expect(actualUri, equals(expectedUri));
     });
     test('pub.dev returns empty body, throws error', () {
-      final mockHttpClient = MockClient((r) async => Response("", 200));
+      final mockHttpClient = MockClient((r) async => Response('', 200));
       final sut = PubClient(mockHttpClient);
 
       expect(
           () => sut.getScore('badges_bar'),
-          throwsA(predicate((e) =>
+          throwsA(predicate((String e) =>
               e == 'Can\'t parse body for Scores because it\'s empty.')));
     });
     test('pub.dev returns 404, throws error', () {
-      final mockHttpClient = MockClient((r) async => Response("", 404));
+      final mockHttpClient = MockClient((r) async => Response('', 404));
       final sut = PubClient(mockHttpClient);
 
       expect(
           () => sut.getScore('wrong-package-name'),
-          throwsA(predicate((e) =>
+          throwsA(predicate((String e) =>
               e ==
               'URL https://pub.dev/packages/wrong-package-name/score fetching returned 404')));
     });
     test('pub.dev returns 303, returns null', () async {
-      final mockHttpClient = MockClient((r) async => Response("", 303));
+      final mockHttpClient = MockClient((r) async => Response('', 303));
       final sut = PubClient(mockHttpClient);
 
       expect(await sut.getScore('unexistent package'), isNull);
@@ -75,15 +77,17 @@ void main() {
 
   group('Score', () {
     test('returns expected score through getValueByType', () {
-      final sut = Score(1, 2, 3);
+      const sut = Score(1, 2, 3);
       expect(sut.getValueByType('likes'), 1);
       expect(sut.getValueByType('pub points'), 2);
       expect(sut.getValueByType('popularity'), 3);
     });
     test('getValueByType throws on unknown type', () {
-      final sut = Score(1, 2, 3);
-      expect(() => sut.getValueByType('wut?'),
-          throwsA(predicate((e) => e == 'Type \'wut?\' is not supported')));
+      const sut = Score(1, 2, 3);
+      expect(
+          () => sut.getValueByType('wut?'),
+          throwsA(
+              predicate((String e) => e == 'Type \'wut?\' is not supported')));
     });
   });
 }

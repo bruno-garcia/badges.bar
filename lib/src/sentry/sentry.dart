@@ -5,11 +5,11 @@ import 'default_integrations.dart'
     if (dart.library.io) 'io_integrations.dart.dart';
 
 /// Potential to become part of the Sentry Dart SDK API.
-class Sentry {
+mixin Sentry {
   static SentryClient currentClient;
   static Future<void> init(
       String dsn, Future<void> Function(SentryClient) app) async {
-    var sentry = SentryClient(dsn: dsn);
+    final sentry = SentryClient(dsn: dsn);
     currentClient = sentry;
 
     await runZonedGuarded(

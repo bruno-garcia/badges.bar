@@ -7,12 +7,12 @@ import 'base.dart';
 
 /// A pub.dev client that is able to retrieve a packages' Pub Scores.
 class PubClient {
-  BaseClient httpClient;
-
   /// Creates an instance of [PubClient] using an optional [HttpClient].
-  PubClient([BaseClient this.httpClient]) {
-    this.httpClient ??= Client();
+  PubClient([this.httpClient]) {
+    httpClient ??= Client();
   }
+
+  Client httpClient;
 
   /// Fetches the packages' score from pub.dev.
   Future<Score> getScore(String name) async {
@@ -20,9 +20,9 @@ class PubClient {
     // the 'score' page is the best candidate becase the size doesn't vary.
     final url = Uri.parse(
         'https://pub.dev/packages/${Uri.encodeComponent(name)}/score');
-    var streamedResponse =
+    final streamedResponse =
         await httpClient.send(Request('GET', url)..followRedirects = false);
-    var response = await Response.fromStream(streamedResponse);
+    final response = await Response.fromStream(streamedResponse);
 
     // Packages that don't exist result in a redirect to the search page.
     if (streamedResponse.statusCode == 303) {
@@ -30,32 +30,32 @@ class PubClient {
     }
 
     if (streamedResponse.statusCode != 200) {
-      throw ("URL $url fetching returned ${streamedResponse.statusCode}");
+      throw 'URL $url fetching returned ${streamedResponse.statusCode}';
     }
 
     return _parseScore(response.body);
   }
 
   Future<Score> _parseScore(String body) async {
-    if (body == null || body == "") {
-      throw ('Can\'t parse body for Scores because it\'s empty.');
+    if (body == null || body == '') {
+      throw "Can't parse body for Scores because it's empty.";
     }
-    var figures = ETree.fromString(body);
-    var scores = figures.xpath('//*[@class="score-key-figures"]')?.first;
+    final figures = ETree.fromString(body);
+    final scores = figures.xpath('//*[@class="score-key-figures"]')?.first;
     if (scores == null) {
-      throw ('Expected div with class \'score-key-figures\' not found.');
+      throw "Expected div with class 'score-key-figures' not found.";
     }
 
     assert(scoreTypes.length == 3);
-    final scoreValues = List(scoreTypes.length);
+    final scoreValues = List<int>(scoreTypes.length);
     for (var i = 0; i < scoreTypes.length; i++) {
-      var value = int.tryParse(scores.children[i]?.children[0]?.children[0]
+      final value = int.tryParse(scores.children[i]?.children[0]?.children[0]
           ?.xpath('/text()')[0]
           ?.name);
-      var valueLabel =
+      final valueLabel =
           scores.children[i]?.children[1]?.xpath('/text()')[0]?.name;
       if (value == null || valueLabel != scoreTypes[i]) {
-        throw ('Expected \'${scoreTypes[i]}\' not found.');
+        throw "Expected '${scoreTypes[i]}' not found.";
       }
       scoreValues[i] = value;
     }
@@ -86,6 +86,6 @@ class Score {
     } else if (type == scoreTypes[2]) {
       return popularity;
     }
-    throw ("Type \'$type\' is not supported");
+    throw "Type '$type' is not supported";
   }
 }

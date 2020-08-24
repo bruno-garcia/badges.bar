@@ -1,7 +1,7 @@
 /// Creates an SVG with the dart logo, [title] and [value].
 String svg(String title, String value) {
   if (title == null || value == null) {
-    throw Exception("Title and value are required");
+    throw 'Title and value are required';
   }
 
   final titleOffset = 27 + (title.length * 2.5);
@@ -10,25 +10,25 @@ String svg(String title, String value) {
   final valueOffset = 9 + (value.length * 2.5) + greenStartOffset;
   final greenWidth = 18 + (value.length * 5);
 
-  var totalWidth = greenStartOffset + greenWidth;
+  final totalWidth = greenStartOffset + greenWidth;
 
   // dart:svg only works on the browser
   // flutter_svg only works on .. Flutter
   // So here we go:
-  return """<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="20">
+  return '''<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="20">
     <linearGradient id="a" x2="0" y2="100%">
         <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
         <stop offset="1" stop-opacity=".1" />
     </linearGradient>
     <rect rx="3" width="${totalWidth - 2}" height="20" fill="#555" />
-    <rect rx="3" x="${greenStartOffset}" width="${greenWidth}" height="20" fill="#4c1" />
-    <path fill="#4c1" d="M${greenStartOffset} 0h4v20h-4z" />
-    <rect rx="3" width="${totalWidth}" height="20" fill="url(#a)" />
+    <rect rx="3" x="$greenStartOffset" width="$greenWidth" height="20" fill="#4c1" />
+    <path fill="#4c1" d="M$greenStartOffset 0h4v20h-4z" />
+    <rect rx="3" width="$totalWidth" height="20" fill="url(#a)" />
     <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
-        <text x="${titleOffset}" y="15" fill="#010101" fill-opacity=".3">${title}</text>
-        <text x="${titleOffset}" y="14">${title}</text>
-        <text x="${valueOffset}" y="15" fill="#010101" fill-opacity=".3">${value}</text>
-        <text x="${valueOffset}" y="14">${value}</text>
+        <text x="$titleOffset" y="15" fill="#010101" fill-opacity=".3">$title</text>
+        <text x="$titleOffset" y="14">$title</text>
+        <text x="$valueOffset" y="15" fill="#010101" fill-opacity=".3">$value</text>
+        <text x="$valueOffset" y="14">$value</text>
     </g>
   <g>
    <path fill="#0089f2" d="m4.50676,15.26954l-3.01064,-3.07541c-0.36246,-0.38036 -0.56969,-0.88752 -0.57926,-1.41844c0.02691,-0.28818 0.10504,-0.56897 0.23051,-0.82835l2.78478,-5.91389l0.5746,11.2361l0.00001,0l0,-0.00001z"/>
@@ -41,5 +41,5 @@ String svg(String title, String value) {
    <path fill="#FFFFFF" d="m14.81711,4.62657c-0.5746,-0.58666 -1.04494,-0.59327 -1.73803,-0.59327l-9.14705,0l0.11668,0.1194l9.03348,0c0.34435,0 1.21776,-0.05891 1.73648,0.47704l-0.00155,-0.00317l-0.00001,0z"/>
   </g>
 </svg>
-""";
+''';
 }

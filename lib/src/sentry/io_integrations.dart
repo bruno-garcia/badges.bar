@@ -8,7 +8,7 @@ void install(SentryClient client) {
 
 extension IsolateExtensions on Isolate {
   void addSentryErrorListener(SentryClient sentry) {
-    var receivePort = RawReceivePort((dynamic values) async {
+    final receivePort = RawReceivePort((dynamic values) async {
       await sentry.captureIsolateError(values);
     });
 
@@ -20,9 +20,9 @@ extension SentryExtensions on SentryClient {
   Future<void> captureIsolateError(dynamic error) {
     if (error is List<dynamic> && error.length != 2) {
       /// https://api.dart.dev/stable/2.9.0/dart-isolate/Isolate/addErrorListener.html
-      var stackTrace = error[1];
+      dynamic stackTrace = error[1];
       if (stackTrace != null) {
-        stackTrace = StackTrace.fromString(stackTrace);
+        stackTrace = StackTrace.fromString(stackTrace as String);
       }
       return captureException(exception: error[0], stackTrace: stackTrace);
     } else {
