@@ -70,6 +70,7 @@ jobs:
               org.opencontainers.image.revision=${{ github.sha }}
               org.opencontainers.image.licenses=${{ github.event.repository.license.name }}
         - name: Create Sentry release ${{ steps.prep.outputs.version }}
+          if: github.event_name != 'pull_request' && github.event_name != 'push'
           uses: getsentry/action-release@v1
           env:
             SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
