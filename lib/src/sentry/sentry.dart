@@ -3,12 +3,23 @@ import 'dart:async';
 import 'package:sentry/sentry.dart';
 import 'default_integrations.dart' if (dart.library.io) 'io_integrations.dart';
 
+class SentryOptions {
+  String environment;
+  String release;
+  String dsn;
+}
+
 /// Potential to become part of the Sentry Dart SDK API.
 mixin Sentry {
   static SentryClient currentClient;
-  static Future<void> init(
-      String dsn, Future<void> Function(SentryClient) app) async {
-    final sentry = SentryClient(dsn: dsn);
+  static Future<void> init(Function(SentryOptions) configureOptions,
+      Future<void> Function(SentryClient) app) async {
+    final options = SentryOptions();
+    configureOptions(options);
+    final sentry = SentryClient(
+        dsn: options.dsn,
+        environmentAttributes:
+            Event(release: options.release, environment: options.environment));
     currentClient = sentry;
 
     await runZonedGuarded(
