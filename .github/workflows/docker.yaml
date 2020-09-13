@@ -14,9 +14,6 @@ jobs:
       fail-fast: false
     steps:
         - uses: actions/checkout@v2
-          with: 
-            # To allow Sentry CLI to find release commit range
-            fetch-depth: 0
         - name: Prepare
           id: prep
           run: |
