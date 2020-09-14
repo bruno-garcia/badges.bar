@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:xpath/xpath.dart';
@@ -16,16 +17,12 @@ class PubClient {
 
   /// Fetches the packages' score from pub.dev.
   Future<Score> getScore(String name) async {
-    // Even though the scores are available in any detail page of the package,
-    // the 'score' page is the best candidate becase the size doesn't vary.
     final url = Uri.parse(
-        'https://pub.dev/packages/${Uri.encodeComponent(name)}/score');
-    final streamedResponse =
-        await httpClient.send(Request('GET', url)..followRedirects = false);
+        'https://pub.dev/api/packages/${Uri.encodeComponent(name)}/score');
+    final streamedResponse = await httpClient.send(Request('GET', url));
     final response = await Response.fromStream(streamedResponse);
 
-    // Packages that don't exist result in a redirect to the search page.
-    if (streamedResponse.statusCode == 303) {
+    if (streamedResponse.statusCode == 404) {
       return null;
     }
 
@@ -40,27 +37,16 @@ class PubClient {
     if (body == null || body == '') {
       throw "Can't parse body for Scores because it's empty.";
     }
-    final figures = ETree.fromString(body);
-    final scores = figures.xpath('//*[@class="score-key-figures"]')?.first;
-    if (scores == null) {
-      throw "Expected div with class 'score-key-figures' not found.";
-    }
 
-    assert(scoreTypes.length == 3);
-    final scoreValues = List<int>(scoreTypes.length);
-    for (var i = 0; i < scoreTypes.length; i++) {
-      final value = int.tryParse(scores.children[i]?.children[0]?.children[0]
-          ?.xpath('/text()')[0]
-          ?.name);
-      final valueLabel =
-          scores.children[i]?.children[1]?.xpath('/text()')[0]?.name;
-      if (value == null || valueLabel != scoreTypes[i]) {
-        throw "Expected '${scoreTypes[i]}' not found.";
-      }
-      scoreValues[i] = value;
-    }
+    final dynamic score = jsonDecode(body);
 
-    return Score(scoreValues[0], scoreValues[1], scoreValues[2]);
+    final likes = score['likeCount'] as int;
+    final popularity = score['popularityScore'] as double;
+    final points = score['grantedPoints'] as int;
+    if (likes == null || popularity == null || points == null) {
+      throw 'Unexpected valyes: likes: "$likes" popularity: "$popularity" points: "$points"';
+    }
+    return Score(likes, (popularity * 100).round(), points);
   }
 }
 
