@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:xpath/xpath.dart';
 
 import 'base.dart';
 
