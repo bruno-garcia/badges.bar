@@ -8,7 +8,6 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  xpath: ^0.1.0
   http: ^0.12.2
   sentry: ^3.0.0
 
