@@ -19,7 +19,7 @@ class PubClient {
     final url = Uri.parse(
         'https://pub.dev/api/packages/${Uri.encodeComponent(name)}/score');
     final req = Request('GET', url);
-    req.headers['User-Agent'] = 'badges.bar/0.0.2 (+https://badges.bar/)'
+    req.headers['User-Agent'] = 'badges.bar/0.0.2 (+https://badges.bar/)';
     final streamedResponse = await httpClient.send(req);
     final response = await Response.fromStream(streamedResponse);
 
