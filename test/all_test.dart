@@ -1,7 +1,7 @@
+import 'package:badges_bar/badges_bar.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
-import 'package:badges_bar/badges_bar.dart';
 
 void main() {
   test('svg renders with title and value', () {
@@ -18,8 +18,8 @@ void main() {
       final sut = PubClient(MockClient((r) async => _validResponse));
       final scores = await sut.getScore('badges_bar');
       expect(scores.likes, 1);
-      expect(scores.popularity, 2);
-      expect(scores.points, 3);
+      expect(scores.points, 2);
+      expect(scores.popularity, 3);
     });
     test('pub.dev changed score payload, throws error', () async {
       final sut = PubClient(MockClient((r) async =>
@@ -71,13 +71,13 @@ void main() {
 
   group('Score', () {
     test('returns expected score through getValueByType', () {
-      const sut = Score(1, 2, 3);
+      const sut = Score(likes: 1, points: 2, popularity: 3);
       expect(sut.getValueByType('likes'), 1);
       expect(sut.getValueByType('pub points'), 2);
       expect(sut.getValueByType('popularity'), 3);
     });
     test('getValueByType throws on unknown type', () {
-      const sut = Score(1, 2, 3);
+      const sut = Score(likes: 1, points: 2, popularity: 3);
       expect(
           () => sut.getValueByType('wut?'),
           throwsA(

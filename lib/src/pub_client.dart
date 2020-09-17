@@ -45,13 +45,17 @@ class PubClient {
     if (likes == null || popularity == null || points == null) {
       throw 'Unexpected valyes: likes: "$likes" popularity: "$popularity" points: "$points"';
     }
-    return Score(likes, (popularity * 100).round(), points);
+    return Score(
+      likes: likes,
+      points: points,
+      popularity: (popularity * 100).round(),
+    );
   }
 }
 
 /// Scores of a package on pub.dev.
 class Score {
-  const Score(this.likes, this.points, this.popularity);
+  const Score({this.likes, this.points, this.popularity});
 
   /// Package 'Likes'.
   final int likes;
