@@ -1,3 +1,7 @@
+# 0.1.1
+
+Fixed points and popularity is mixed up (thanks @mit-mit)
+
 # 0.0.6
 
 Using a web API to fetch scores. #4
