@@ -3,6 +3,10 @@
 [![build](https://github.com/bruno-garcia/badges.bar/workflows/build/badge.svg?branch=main)](https://github.com/bruno-garcia/badges.bar/actions?query=branch%3Amain) 
 [![coverage](https://codecov.io/gh/bruno-garcia/badges.bar/branch/main/graph/badge.svg)](https://codecov.io/gh/bruno-garcia/badges.bar) [![likes](https://badges.bar/badges_bar/likes)](https://pub.dev/packages/badges_bar/score) [![popularity](https://badges.bar/badges_bar/popularity)](https://pub.dev/packages/badges_bar/score) [![pub points](https://badges.bar/badges_bar/pub%20points)](https://pub.dev/packages/badges_bar/score)
 
+## On Docker Hub
+
+https://hub.docker.com/r/brunogarcia/badges.bar/tags
+
 ## Using badges.bar
 
 You can create a badge for your package by using `https://badges.bar/{package}/{score_type}`.
