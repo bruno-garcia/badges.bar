@@ -67,6 +67,17 @@ void main() {
 
       expect(await sut.getScore('unexistent package'), isNull);
     });
+    test('requests include User-Agent header', () async {
+      final mockHttpClient = MockClient((r) async {
+        expect(
+            r.headers['User-Agent'],
+            matches(
+                r'badges\.bar\/\d+\.\d+\.\d+ \(\+https:\/\/badges\.bar\/\)'));
+        return Response('', 404);
+      });
+
+      final _ = PubClient(mockHttpClient).getScore('package');
+    });
   });
 
   group('Score', () {
