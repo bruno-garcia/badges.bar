@@ -23,9 +23,14 @@ if ! pub publish --dry-run > /dev/null; then
     exit
 fi
 
+git add pubspec.yaml
+git add lib/src/version.dart
+git commit -m "Releasing $version"
+
 export git_tag=v$version
 if ! git tag $git_tag; then
     echo "Failed to create git tag $git_tag"
+    exit
 fi
 
 echo CTRL + C to quit or anything else to continue
@@ -33,3 +38,4 @@ read
 
 pub publish
 git push --tags
+git push origin main
