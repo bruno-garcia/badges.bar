@@ -18,7 +18,9 @@ class PubClient {
   Future<Score> getScore(String name) async {
     final url = Uri.parse(
         'https://pub.dev/api/packages/${Uri.encodeComponent(name)}/score');
-    final streamedResponse = await httpClient.send(Request('GET', url));
+    final req = Request('GET', url);
+    req.headers['User-Agent'] = 'badges.bar/0.0.2 (+https://badges.bar/)';
+    final streamedResponse = await httpClient.send(req);
     final response = await Response.fromStream(streamedResponse);
 
     if (streamedResponse.statusCode == 404) {
