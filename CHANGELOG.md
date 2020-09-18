@@ -1,3 +1,7 @@
+# 0.1.2
+
+Supply a User-Agent for pub.dev #5 (thanks @jonasfj)
+
 # 0.1.1
 
 Fixed points and popularity is mixed up (thanks @mit-mit)
