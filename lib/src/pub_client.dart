@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import 'base.dart';
+import 'version.dart';
 
 /// A pub.dev client that is able to retrieve a packages' Pub Scores.
 class PubClient {
@@ -19,7 +20,7 @@ class PubClient {
     final url = Uri.parse(
         'https://pub.dev/api/packages/${Uri.encodeComponent(name)}/score');
     final req = Request('GET', url);
-    req.headers['User-Agent'] = 'badges.bar/0.0.2 (+https://badges.bar/)';
+    req.headers['User-Agent'] = 'badges.bar/$version (+$site)';
     final streamedResponse = await httpClient.send(req);
     final response = await Response.fromStream(streamedResponse);
 
