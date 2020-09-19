@@ -18,9 +18,9 @@ Score types can be either:
 
 For example for the package `sentry`:
 
-[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score): `[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score)`
+[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score): `[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score)`
 
-[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score): `[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score)`
+[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score): `[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score)`
 
 [![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score): `[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score)`
 
