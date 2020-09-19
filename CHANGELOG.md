@@ -1,3 +1,7 @@
+# 0.1.3
+
+Display version on index.html
+
 # 0.1.2
 
 Supply a User-Agent for pub.dev #5 (thanks @jonasfj)
