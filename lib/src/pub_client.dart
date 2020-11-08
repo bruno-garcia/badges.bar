@@ -46,7 +46,7 @@ class PubClient {
     final popularity = score['popularityScore'] as double;
     final points = score['grantedPoints'] as int;
     if (likes == null || popularity == null || points == null) {
-      throw 'Unexpected valyes: likes: "$likes" popularity: "$popularity" points: "$points"';
+      throw 'Unexpected values: likes: "$likes" popularity: "$popularity" points: "$points"';
     }
     return Score(
       likes: likes,

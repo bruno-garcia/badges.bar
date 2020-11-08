@@ -28,7 +28,7 @@ void main() {
           () => sut.getScore('badges_bar'),
           throwsA(predicate((String e) =>
               e ==
-              'Unexpected valyes: likes: "1" popularity: "null" points: "3"')));
+              'Unexpected values: likes: "1" popularity: "null" points: "3"')));
     });
     test('package name is URI encoded', () async {
       final expectedUri = Uri.parse(

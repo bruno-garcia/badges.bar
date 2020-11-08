@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:badges_bar/src/pedantic.dart';
 import 'package:badges_bar/src/pub_client.dart';
-import 'package:badges_bar/src/sentry/sentry.dart';
 import 'package:sentry/sentry.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,15 +11,36 @@ import 'package:badges_bar/badges_bar.dart';
 
 /// Starts a server that generates SVG badges for pub.dev scores.
 Future<void> main() async {
-  await Sentry.init((SentryOptions o) {
+  Sentry.init((SentryOptions o) {
     o.dsn =
         'https://09a6dc7f166e467793a5d2bc7c7a7df2@o117736.ingest.sentry.io/1857674';
     o.release = Platform.environment['VERSION'];
     o.environment = Platform.environment['ENVIRONMENT'];
-  }, (SentryClient sentry) => _run(sentry));
+  });
+  // Should be built-in to Sentry
+  Isolate.current.addSentryErrorListener();
+
+  // Should go into Sentry
+  await runZonedGuarded(
+    () async {
+      await _run();
+    },
+    (error, stackTrace) async {
+      try {
+        await Sentry.captureException(
+          error,
+          stackTrace: stackTrace,
+        );
+        print('Error sent to sentry.io: $error');
+      } catch (e) {
+        print('Capture failed: $e');
+        print('Original error: $error');
+      }
+    },
+  );
 }
 
-Future<void> _run(SentryClient sentry) async {
+Future<void> _run() async {
   final port = int.tryParse(Platform.environment['PORT'] ?? '') ?? 31337;
   final address =
       isProduction ? InternetAddress.anyIPv4 : InternetAddress.loopbackIPv4;
@@ -40,7 +61,7 @@ Future<void> _run(SentryClient sentry) async {
         if (isProduction) {
           unawaited(serveFuture.catchError((dynamic e, dynamic s) async {
             request.response.trySetServerError();
-            return await sentry.captureException(exception: e, stackTrace: s);
+            return await Sentry.captureException(e, stackTrace: s);
           }).whenComplete(() => request.response.close()));
         } else {
           final current = counter++;
@@ -54,7 +75,7 @@ Future<void> _run(SentryClient sentry) async {
           }));
         }
       } catch (e, s) {
-        await sentry.captureException(exception: e, stackTrace: s);
+        await Sentry.captureException(e, stackTrace: s);
       }
     }
   } finally {
@@ -108,3 +129,29 @@ extension HttpResponseExtensions on HttpResponse {
 }
 
 bool get isProduction => Platform.environment['ENVIRONMENT'] == 'prod';
+
+extension IsolateExtensions on Isolate {
+  void addSentryErrorListener() {
+    final receivePort = RawReceivePort((dynamic values) async {
+      await SentryIsolateIntegration.captureIsolateError(values);
+    });
+
+    Isolate.current.addErrorListener(receivePort.sendPort);
+  }
+}
+
+class SentryIsolateIntegration {
+  static Future<void> captureIsolateError(dynamic error) {
+    if (error is List<dynamic> && error.length == 2) {
+      /// https://api.dart.dev/stable/2.9.0/dart-isolate/Isolate/addErrorListener.html
+      dynamic stackTrace = error[1];
+      if (stackTrace != null) {
+        stackTrace = StackTrace.fromString(stackTrace as String);
+      }
+      return Sentry.captureException(error[0], stackTrace: stackTrace);
+    } else {
+      // not a valid isolate error
+      return Future.value();
+    }
+  }
+}
