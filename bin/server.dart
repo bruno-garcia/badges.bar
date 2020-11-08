@@ -4,7 +4,6 @@ import 'dart:isolate';
 
 import 'package:badges_bar/src/pedantic.dart';
 import 'package:badges_bar/src/pub_client.dart';
-// import 'package:badges_bar/src/sentry/sentry.dart';
 import 'package:sentry/sentry.dart';
 import 'package:http/http.dart' as http;
 

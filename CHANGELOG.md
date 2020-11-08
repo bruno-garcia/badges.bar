@@ -1,3 +1,7 @@
+# vNext
+
+Use new Sentry SDK 4.0.0-alpha.1
+
 # 0.1.3
 
 Display version on index.html
