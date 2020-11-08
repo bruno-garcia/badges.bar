@@ -1,6 +1,7 @@
-# vNext
+# 0.1.4-alpha.1
 
 Use new Sentry SDK 4.0.0-alpha.1
+Bumped dependencies
 
 # 0.1.3
 
