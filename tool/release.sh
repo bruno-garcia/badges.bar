@@ -18,7 +18,7 @@ sed -i '' -e "s/version: \(.*\)/version: $version/g" pubspec.yaml
 sed -i '' -e "s/version = '\(.*\)'/version = '$version'/g" lib/src/version.dart
 sed -i '' -e "s/v\([0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}\)/v$version/g" web/index.html
 
-if ! pub publish --dry-run > /dev/null; then
+if ! flutter pub pub publish --dry-run > /dev/null; then
     echo
     echo 'Running "pub publish --dry-run" gives warnings. Correct those before proceeding.'
     exit
@@ -43,6 +43,6 @@ if ! git tag $git_tag; then
     exit
 fi
 
-pub publish
+flutter pub pub publish
 git push --tags
 git push origin main

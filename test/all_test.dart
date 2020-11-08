@@ -72,7 +72,7 @@ void main() {
         expect(
             r.headers['User-Agent'],
             matches(
-                r'badges\.bar\/\d+\.\d+\.\d+ \(\+https:\/\/badges\.bar\/\)'));
+                r'badges\.bar\/\d+\.\d+\.\d+(-[A-Za-z]+\.\d+)? \(\+https:\/\/badges\.bar\/\)'));
         return Response('', 404);
       });
 
