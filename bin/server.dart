@@ -143,12 +143,7 @@ extension IsolateExtensions on Isolate {
 class SentryIsolateIntegration {
   static Future<void> captureIsolateError(dynamic error) {
     if (error is List<dynamic> && error.length == 2) {
-      /// https://api.dart.dev/stable/2.9.0/dart-isolate/Isolate/addErrorListener.html
-      dynamic stackTrace = error[1];
-      if (stackTrace != null) {
-        stackTrace = StackTrace.fromString(stackTrace as String);
-      }
-      return Sentry.captureException(error[0], stackTrace: stackTrace);
+      return Sentry.captureException(error[0], stackTrace: error[1]);
     } else {
       // not a valid isolate error
       return Future.value();
