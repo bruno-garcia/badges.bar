@@ -1,4 +1,5 @@
 .dart_tool
+.packages
 coverage/
 coverage_badge.svg
 test/.test_coverage.dart
