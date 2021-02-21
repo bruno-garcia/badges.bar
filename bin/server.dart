@@ -17,7 +17,6 @@ Future<void> main() async {
     o.release = Platform.environment['VERSION'];
     o.environment = Platform.environment['ENVIRONMENT'];
   });
-  Isolate.current.addSentryErrorListener();
 
   // Should go into Sentry
   await runZonedGuarded(
