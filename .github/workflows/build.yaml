@@ -49,18 +49,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: axel-op/dart-package-analyzer@v2
+      - uses: axel-op/dart-package-analyzer@v3
         id: analysis
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
       - name: Check scores
         # TODO: Once 1.0.0 lands, change min maintenance points to 100
         run: |
-          MAINTENANCE_SCORE=${{ steps.analysis.outputs.maintenance }}
-          HEALTH_SCORE=${{ steps.analysis.outputs.health }}
-          if (( $(echo "$MAINTENANCE_SCORE < 90" | bc) )) || (( $(echo "$HEALTH_SCORE < 100" | bc) ))
+          PERCENTAGE=$(( $TOTAL * 100 / $TOTAL_MAX ))
+          # revert to 100 when we are nul-safety is implemented
+          if (( $PERCENTAGE < 90 ))
           then
-            echo "Scores must be min 90 for maintenance (until 1.0 ships), 100 for health."
+            echo Score too low!
             exit 1
           fi
   docker:

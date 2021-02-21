@@ -11,14 +11,12 @@ import 'package:badges_bar/badges_bar.dart';
 
 /// Starts a server that generates SVG badges for pub.dev scores.
 Future<void> main() async {
-  Sentry.init((SentryOptions o) {
+  await Sentry.init((SentryOptions o) {
     o.dsn =
         'https://09a6dc7f166e467793a5d2bc7c7a7df2@o117736.ingest.sentry.io/1857674';
     o.release = Platform.environment['VERSION'];
     o.environment = Platform.environment['ENVIRONMENT'];
   });
-  // Should be built-in to Sentry
-  Isolate.current.addSentryErrorListener();
 
   // Should go into Sentry
   await runZonedGuarded(
@@ -129,24 +127,3 @@ extension HttpResponseExtensions on HttpResponse {
 }
 
 bool get isProduction => Platform.environment['ENVIRONMENT'] == 'prod';
-
-extension IsolateExtensions on Isolate {
-  void addSentryErrorListener() {
-    final receivePort = RawReceivePort((dynamic values) async {
-      await SentryIsolateIntegration.captureIsolateError(values);
-    });
-
-    Isolate.current.addErrorListener(receivePort.sendPort);
-  }
-}
-
-class SentryIsolateIntegration {
-  static Future<void> captureIsolateError(dynamic error) {
-    if (error is List<dynamic> && error.length == 2) {
-      return Sentry.captureException(error[0], stackTrace: error[1]);
-    } else {
-      // not a valid isolate error
-      return Future.value();
-    }
-  }
-}
