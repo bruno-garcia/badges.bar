@@ -1,3 +1,7 @@
+# 0.1.5
+
+Updated Sentry SDK 4.0.5
+
 # 0.1.4-alpha.2
 
 CI hangs on coverage and doesn't publish to docker
