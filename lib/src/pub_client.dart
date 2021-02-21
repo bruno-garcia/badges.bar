@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart';
+// import as can be dropped once fixed: https://github.com/getsentry/sentry-dart/issues/250#issuecomment-782882646
+import 'package:sentry/sentry.dart' as sentry;
 
 import 'base.dart';
 import 'version.dart';
@@ -10,7 +12,7 @@ import 'version.dart';
 class PubClient {
   /// Creates an instance of [PubClient] using an optional [HttpClient].
   PubClient([this.httpClient]) {
-    httpClient ??= Client();
+    httpClient ??= sentry.SentryHttpClient();
   }
 
   Client httpClient;

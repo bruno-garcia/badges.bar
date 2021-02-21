@@ -11,7 +11,6 @@ String svg(String title, String value) {
   final greenWidth = 18 + (value.length * 5);
 
   final totalWidth = greenStartOffset + greenWidth;
-
   // dart:svg only works on the browser
   // flutter_svg only works on .. Flutter
   // So here we go:
