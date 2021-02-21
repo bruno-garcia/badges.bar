@@ -1,5 +1,5 @@
 name: badges_bar
-version: 0.1.4-alpha.2
+version: 0.1.5
 description: >
   SVG badge generator for packages on pub.dev. Likes, pub points and popularity.
 homepage: https://github.com/bruno-garcia/badges.bar
