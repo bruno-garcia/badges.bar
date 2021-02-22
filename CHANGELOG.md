@@ -1,3 +1,7 @@
+# 0.1.6
+
+More context to debug errors
+
 # 0.1.5
 
 Updated Sentry SDK 4.0.5
