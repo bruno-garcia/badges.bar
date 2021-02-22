@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:isolate';
 
 import 'package:badges_bar/src/pedantic.dart';
 import 'package:badges_bar/src/pub_client.dart';
 import 'package:sentry/sentry.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:badges_bar/badges_bar.dart';
 
@@ -14,8 +12,10 @@ Future<void> main() async {
   await Sentry.init((SentryOptions o) {
     o.dsn =
         'https://09a6dc7f166e467793a5d2bc7c7a7df2@o117736.ingest.sentry.io/1857674';
+    // https://github.com/getsentry/sentry-dart/issues/306
     o.release = Platform.environment['VERSION'];
     o.environment = Platform.environment['ENVIRONMENT'];
+    o.debug = !isProduction;
   });
 
   // Should go into Sentry
@@ -49,35 +49,30 @@ Future<void> _run() async {
   Environment: ${Platform.environment['ENVIRONMENT']}
   Endpoint: http://${address.address}:${server.port}''');
 
-  final httpClient = http.Client();
-  final client = PubClient(httpClient);
-  try {
-    var counter = 0;
-    await for (final request in server) {
-      try {
-        final serveFuture = _serve(request, client);
-        if (isProduction) {
-          unawaited(serveFuture.catchError((dynamic e, dynamic s) async {
-            request.response.trySetServerError();
-            return await Sentry.captureException(e, stackTrace: s);
-          }).whenComplete(() => request.response.close()));
-        } else {
-          final current = counter++;
-          print('Starting to serve request: $current');
-          unawaited(serveFuture.catchError((dynamic e, dynamic s) {
-            print('$e\n$s');
-            request.response.trySetServerError();
-          }).whenComplete(() {
-            print('Done serving request: $current');
-            return request.response.close();
-          }));
-        }
-      } catch (e, s) {
-        await Sentry.captureException(e, stackTrace: s);
+  final client = PubClient();
+  var counter = 0;
+  await for (final request in server) {
+    try {
+      final serveFuture = _serve(request, client);
+      if (isProduction) {
+        unawaited(serveFuture.catchError((dynamic e, dynamic s) async {
+          request.response.trySetServerError();
+          return await Sentry.captureException(e, stackTrace: s);
+        }).whenComplete(() => request.response.close()));
+      } else {
+        final current = counter++;
+        print('Starting to serve request: $current');
+        unawaited(serveFuture.catchError((dynamic e, dynamic s) {
+          print('$e\n$s');
+          request.response.trySetServerError();
+        }).whenComplete(() {
+          print('Done serving request: $current');
+          return request.response.close();
+        }));
       }
+    } catch (e, s) {
+      await Sentry.captureException(e, stackTrace: s);
     }
-  } finally {
-    httpClient.close();
   }
 }
 
@@ -126,4 +121,4 @@ extension HttpResponseExtensions on HttpResponse {
   }
 }
 
-bool get isProduction => Platform.environment['ENVIRONMENT'] == 'prod';
+bool get isProduction => Platform.environment['ENVIRONMENT'] == 'production';
