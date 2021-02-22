@@ -10,7 +10,8 @@ import 'package:badges_bar/badges_bar.dart';
 /// Starts a server that generates SVG badges for pub.dev scores.
 Future<void> main() async {
   await Sentry.init((SentryOptions o) {
-    o.dsn = 'https://09a6dc7f166e467793a5d2bc7c7a7df2@o117736.ingest.sentry.io/1857674';
+    o.dsn =
+        'https://09a6dc7f166e467793a5d2bc7c7a7df2@o117736.ingest.sentry.io/1857674';
     // https://github.com/getsentry/sentry-dart/issues/306
     o.release = Platform.environment['VERSION'];
     o.environment = Platform.environment['ENVIRONMENT'];
