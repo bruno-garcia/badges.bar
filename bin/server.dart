@@ -87,8 +87,8 @@ Future<void> _serve(HttpRequest request, PubClient client) async {
     redirectHome(request);
   } else {
     final package = request.requestedUri.pathSegments.reversed.skip(1).first;
-    final score = await client.getScore(package);
-    if (score == null) {
+    final metrics = await client.getMetrics(package);
+    if (metrics == null) {
       redirectHome(request);
     }
     request.response.headers.contentType = _contentTypeSvg;
@@ -96,7 +96,7 @@ Future<void> _serve(HttpRequest request, PubClient client) async {
         'public, max-age=3600, stale-while-revalidate=30, stale-if-error=86400');
     final scoreType = request.requestedUri.pathSegments.last;
     request.response
-        .write(svg(scoreType, score.getValueByType(scoreType).toString()));
+        .write(svg(svgTitle[scoreType], metrics.getValueByType(scoreType)));
   }
 }
 
