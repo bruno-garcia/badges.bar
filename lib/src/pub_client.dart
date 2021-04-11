@@ -19,7 +19,8 @@ class PubClient {
 
   /// Fetches the packages' score from pub.dev.
   Future<Metrics> getMetrics(String name) async {
-    final url = Uri.parse('https://pub.dev/api/packages/${Uri.encodeComponent(name)}/metrics');
+    final url = Uri.parse(
+        'https://pub.dev/api/packages/${Uri.encodeComponent(name)}/metrics');
     final req = Request('GET', url);
     req.headers['User-Agent'] = 'badges.bar/$version (+$site)';
     final streamedResponse = await httpClient.send(req);
@@ -44,40 +45,30 @@ class PubClient {
     final dynamic metrics = jsonDecode(body);
 
     final dynamic score = metrics['score'];
-
-    final dynamic scoreCard = metrics['scorecard'];
-
     final likes = score['likeCount'] as int;
     final popularity = score['popularityScore'] as double;
     final points = score['grantedPoints'] as int;
     final maxPoints = score['maxPoints'] as int;
-    final lastUpdated = score['lastUpdated'] as DateTime;
+
+    final lastUpdated = SafeCast.tryCast<DateTime>(score, 'lastUpdated');
+    final dynamic scoreCard = metrics['scorecard'];
     final packageName = scoreCard['packageName'] as String;
     final packageVersion = scoreCard['packageVersion'] as String;
     final packageCreated = scoreCard['packgeCreated'] as DateTime;
-    final packageVersionCreated = scoreCard['packageVersionCreated'] as DateTime;
-    final derivedTags = scoreCard['derivedTags'] as List<String>;
-    final flags = scoreCard['flags'] as List<String>;
-    final reportTypes = scoreCard['reportTypes'] as List<String>;
+    final packageVersionCreated =
+        SafeCast.tryCast<DateTime>(score, 'packageVersionCreated');
+    final derivedTags = SafeCast.tryCast<List<String>>(score, 'derivedTags');
+    final flags = SafeCast.tryCast<List<String>>(score, 'flags');
+    final reportTypes = SafeCast.tryCast<List<String>>(score, 'reportTypes');
 
-    if ((likes == null) ||
-        (popularity == null) ||
-        (points == null) ||
-        (maxPoints == null) ||
-        (lastUpdated == null) ||
-        (packageName == null) ||
-        (packageVersion == null) ||
-        (packageCreated == null) ||
-        (packageVersionCreated == null) ||
-        (derivedTags == null) ||
-        (flags == null) ||
-        (reportTypes == null)) {
-      throw 'Unexpected values: likes: "$likes" popularity: "$popularity" points: "$points" maxPoints: "$maxPoints" updated: "$lastUpdated" name: "$packageName" version: "$packageVersion" created: "$packageCreated" versionCreated: "$packageVersionCreated" derivedTags: "$derivedTags" flags: "$flags" reportTypes: "$reportTypes"';
+    int roundedPopularity;
+    if (popularity != null) {
+      roundedPopularity = (popularity * 100).round();
     }
     return Metrics(
       likes: likes,
       points: points,
-      popularity: (popularity * 100).round(),
+      popularity: roundedPopularity,
       maxPoints: maxPoints,
       lastUpdated: lastUpdated,
       packageName: packageName,

@@ -34,3 +34,14 @@ const Map<String, String> svgTitle = {
   'flags': 'Flags',
   'report types': 'Report Types'
 };
+
+class SafeCast {
+  static T tryCast<T>(dynamic map, String key) {
+    try {
+      return map[key] as T;
+    } catch (e) {
+      // print('"' + key + '" failed to cast: ' + e.toString());
+    }
+    return null;
+  }
+}
