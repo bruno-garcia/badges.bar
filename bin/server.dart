@@ -95,8 +95,12 @@ Future<void> _serve(HttpRequest request, PubClient client) async {
     request.response.headers.add('Cache-Control',
         'public, max-age=3600, stale-while-revalidate=30, stale-if-error=86400');
     final scoreType = request.requestedUri.pathSegments.last;
-    request.response
-        .write(svg(svgTitle[scoreType], metrics.getValueByType(scoreType)));
+    final value = metrics.getValueByType(scoreType);
+    if (value != null) {
+      request.response.write(svg(scoreType, value));
+    } else {
+      Sentry.captureMessage('No value for scoreType: ' + scoreType);
+    }
   }
 }
 
