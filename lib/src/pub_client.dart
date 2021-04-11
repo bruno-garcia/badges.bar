@@ -49,17 +49,17 @@ class PubClient {
     final popularity = score['popularityScore'] as double;
     final points = score['grantedPoints'] as int;
     final maxPoints = score['maxPoints'] as int;
+    final lastUpdated = SafeCast.tryDateTime(score, 'lastUpdated');
 
-    final lastUpdated = SafeCast.tryCast<DateTime>(score, 'lastUpdated');
     final dynamic scoreCard = metrics['scorecard'];
     final packageName = scoreCard['packageName'] as String;
     final packageVersion = scoreCard['packageVersion'] as String;
-    final packageCreated = scoreCard['packgeCreated'] as DateTime;
+    final packageCreated = SafeCast.tryDateTime(scoreCard, 'packgeCreated');
     final packageVersionCreated =
-        SafeCast.tryCast<DateTime>(score, 'packageVersionCreated');
-    final derivedTags = SafeCast.tryCast<List<String>>(score, 'derivedTags');
-    final flags = SafeCast.tryCast<List<String>>(score, 'flags');
-    final reportTypes = SafeCast.tryCast<List<String>>(score, 'reportTypes');
+        SafeCast.tryDateTime(scoreCard, 'packageVersionCreated');
+    final derivedTags = SafeCast.tryCastToStringList(scoreCard, 'derivedTags');
+    final flags = SafeCast.tryCastToStringList(scoreCard, 'flags');
+    final reportTypes = SafeCast.tryCastToStringList(scoreCard, 'reportTypes');
 
     int roundedPopularity;
     if (popularity != null) {
