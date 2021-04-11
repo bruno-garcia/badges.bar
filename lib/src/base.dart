@@ -1,3 +1,5 @@
+import 'package:sentry/sentry.dart';
+
 /// The types of scores. In the order they are presented on pub.dev
 const scoreTypes = [
   'pub points',
@@ -19,28 +21,13 @@ const scorecardTypes = [
   'report types'
 ];
 
-const Map<String, String> svgTitle = {
-  'pub points': 'Points',
-  'max points': 'Max Points',
-  'likes': 'Likes',
-  'popularity': 'Popularity',
-  'last updated': 'Last Updated',
-  'name': 'Package Name',
-  'version': 'Package Version',
-  'runtime version': 'Runtime Version',
-  'created': 'Created',
-  'version created': 'Version Created',
-  'derived tags': 'Platforms',
-  'flags': 'Flags',
-  'report types': 'Report Types'
-};
-
 class SafeCast {
   static T tryCast<T>(dynamic map, String key) {
     try {
       return map[key] as T;
     } catch (e) {
-      // print('"' + key + '" failed to cast: ' + e.toString());
+      Sentry.addBreadcrumb(
+          Breadcrumb(message: '"' + key + '" failed to cast. ' + e.toString()));
     }
     return null;
   }
