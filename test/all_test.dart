@@ -17,17 +17,9 @@ void main() {
     test('with valid package, returns expected Metrics', () async {
       final sut = PubClient(MockClient((r) async => _validResponse));
       final metrics = await sut.getMetrics('badges_bar');
-      expect(metrics.likes, 1);
-      expect(metrics.points, 2);
-      expect(metrics.popularity, 3);
-    });
-    test('pub.dev changed metrics payload, throws error', () async {
-      final sut = PubClient(MockClient(
-          (r) async => Response('{"likeCount":1,"popularity":2,"grantedPoints":3}', 200)));
-      expect(
-          () => sut.getMetrics('badges_bar'),
-          throwsA(predicate(
-              (String e) => e == 'Unexpected values: likes: "1" popularity: "null" points: "3"')));
+      expect(metrics.likes, 17);
+      expect(metrics.points, 60);
+      expect(metrics.popularity, 65);
     });
     test('package name is URI encoded', () async {
       final expectedUri =
@@ -132,10 +124,10 @@ void main() {
   });
 }
 
-Response _validResponse = Response(_validMetricsHtmlElement, 200);
+Response _validResponse = Response(_validMetricsResponse, 200);
 Response _differentLabelsResponse = Response(_wrongLabelsMetrics, 200);
 
-String _validMetricsHtmlElement = '''
+String _validMetricsResponse = '''
 {"score":{"grantedPoints":60,"maxPoints":110,"likeCount":17,"popularityScore":0.6504369538077404,"lastUpdated":"2021-03-30T23:22:46.439201Z"},"scorecard":{"packageName":"pana","packageVersion":"0.15.4","runtimeVersion":"2021.03.19","updated":"2021-03-30T23:22:46.439201Z","packageCreated":"2015-09-25T06:45:22.439Z","packageVersionCreated":"2021-03-15T10:34:06.601324Z","grantedPubPoints":60,"maxPubPoints":110,"popularityScore":0.6504369538077404,"derivedTags":["sdk:dart","sdk:flutter","platform:android","platform:ios","platform:windows","platform:linux","platform:macos","runtime:native-aot","runtime:native-jit"],"flags":["latest-stable"],"reportTypes":["dartdoc","pana"]}}''';
 
 String _wrongLabelsMetrics = '''
