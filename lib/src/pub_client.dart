@@ -19,7 +19,8 @@ class PubClient {
 
   /// Fetches the packages' score from pub.dev.
   Future<Metrics> getMetrics(String name) async {
-    final url = Uri.parse('https://pub.dev/api/packages/${Uri.encodeComponent(name)}/metrics');
+    final url = Uri.parse(
+        'https://pub.dev/api/packages/${Uri.encodeComponent(name)}/metrics');
     final req = Request('GET', url);
     req.headers['User-Agent'] = 'badges.bar/$version (+$site)';
     final streamedResponse = await httpClient.send(req);
@@ -54,7 +55,8 @@ class PubClient {
     final packageName = scoreCard['packageName'] as String;
     final packageVersion = scoreCard['packageVersion'] as String;
     final packageCreated = scoreCard['packgeCreated'] as DateTime;
-    final packageVersionCreated = SafeCast.tryCast<DateTime>(score, 'packageVersionCreated');
+    final packageVersionCreated =
+        SafeCast.tryCast<DateTime>(score, 'packageVersionCreated');
     final derivedTags = SafeCast.tryCast<List<String>>(score, 'derivedTags');
     final flags = SafeCast.tryCast<List<String>>(score, 'flags');
     final reportTypes = SafeCast.tryCast<List<String>>(score, 'reportTypes');

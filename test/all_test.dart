@@ -22,8 +22,8 @@ void main() {
       expect(metrics.popularity, 65);
     });
     test('package name is URI encoded', () async {
-      final expectedUri =
-          Uri.parse('https://pub.dev/api/packages/..%2F..%2Fmy-packages%3F%F0%9F%94%93%3D/metrics');
+      final expectedUri = Uri.parse(
+          'https://pub.dev/api/packages/..%2F..%2Fmy-packages%3F%F0%9F%94%93%3D/metrics');
       Uri actualUri;
       final mockHttpClient = MockClient((r) async {
         actualUri = r.url;
@@ -39,8 +39,8 @@ void main() {
 
       expect(
           () => sut.getMetrics('badges_bar'),
-          throwsA(
-              predicate((String e) => e == 'Can\'t parse body for Metrics because it\'s empty.')));
+          throwsA(predicate((String e) =>
+              e == 'Can\'t parse body for Metrics because it\'s empty.')));
     });
     test('pub.dev returns 500, throws error', () {
       final mockHttpClient = MockClient((r) async => Response('', 500));
@@ -60,8 +60,10 @@ void main() {
     });
     test('requests include User-Agent header', () async {
       final mockHttpClient = MockClient((r) async {
-        expect(r.headers['User-Agent'],
-            matches(r'badges\.bar\/\d+\.\d+\.\d+(-[A-Za-z]+\.\d+)? \(\+https:\/\/badges\.bar\/\)'));
+        expect(
+            r.headers['User-Agent'],
+            matches(
+                r'badges\.bar\/\d+\.\d+\.\d+(-[A-Za-z]+\.\d+)? \(\+https:\/\/badges\.bar\/\)'));
         return Response('', 404);
       });
 
@@ -118,8 +120,10 @@ void main() {
         flags: ['latest-stable'],
         reportTypes: ['dartdoc'],
       );
-      expect(() => sut.getValueByType('wut?'),
-          throwsA(predicate((String e) => e == 'Type \'wut?\' is not supported')));
+      expect(
+          () => sut.getValueByType('wut?'),
+          throwsA(
+              predicate((String e) => e == 'Type \'wut?\' is not supported')));
     });
   });
 }

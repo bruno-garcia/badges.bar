@@ -37,10 +37,9 @@ const Map<String, String> svgTitle = {
 
 class SafeCast {
   static T tryCast<T>(dynamic map, String key) {
-    try{
+    try {
       return map[key] as T;
-    }
-    catch (e) {
+    } catch (e) {
       // print('"' + key + '" failed to cast: ' + e.toString());
     }
     return null;
