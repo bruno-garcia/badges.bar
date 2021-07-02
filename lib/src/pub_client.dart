@@ -11,7 +11,10 @@ import 'version.dart';
 class PubClient {
   /// Creates an instance of [PubClient] using an optional [HttpClient].
   PubClient([this.httpClient]) {
-    httpClient ??= SentryHttpClient();
+    httpClient ??= SentryHttpClient(
+      captureFailedRequests: true,
+      failedRequestStatusCodes: [SentryStatusCode.range(400, 500)],
+    );
   }
 
   Client httpClient;

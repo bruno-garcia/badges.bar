@@ -16,6 +16,7 @@ Future<void> main() async {
     o.release = Platform.environment['VERSION'];
     o.environment = Platform.environment['ENVIRONMENT'];
     o.debug = !isProduction;
+    o.enablePrintBreadcrumbs = false;
   });
 
   // Should go into Sentry
