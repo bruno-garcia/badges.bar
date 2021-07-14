@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   http: ^0.13.0
-  sentry: ^5.0.0
+  sentry: ^6.0.0-beta.1
 
 dev_dependencies:
   pedantic: ^1.11.0
