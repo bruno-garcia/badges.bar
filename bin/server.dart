@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:badges_bar/src/pedantic.dart';
-import 'package:badges_bar/src/pub_client.dart';
-import 'package:sentry/sentry.dart';
-
 import 'package:badges_bar/badges_bar.dart';
+import 'package:badges_bar/src/pedantic.dart';
+import 'package:sentry/sentry.dart';
 
 /// Starts a server that generates SVG badges for pub.dev scores.
 Future<void> main() async {

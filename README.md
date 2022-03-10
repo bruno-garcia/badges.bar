@@ -39,7 +39,7 @@ The `textSvg` above would render the svg like in  [![likes](https://badges.bar/s
 ```dart
 const package = 'badge_bar';
 final client = PubClient();
-final score = await client.getScore(package);
+final score = await client.getMetrics(package);
 print('Stats for $package:');
 print('Likes: ${score.likes}');
 print('Popularity: ${score.popularity}');

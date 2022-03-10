@@ -22,4 +22,5 @@ Future<void> main() async {
   print('Derived Tags: ${metrics.derivedTags}');
   print('Flags: ${metrics.flags}');
   print('Report Types: ${metrics.reportTypes}');
+  print('Publisher: ${metrics.publisher}');
 }

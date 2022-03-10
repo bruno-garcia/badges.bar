@@ -7,6 +7,7 @@ const scoreTypes = [
   'likes',
   'popularity',
   'last updated',
+  'publisher',
 ];
 
 /// The types of scorecards. In the order they are presented on pub.dev API.
