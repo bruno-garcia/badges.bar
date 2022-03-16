@@ -2,7 +2,7 @@ name: build
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
     branches:
       - main
   pull_request:
@@ -30,21 +30,21 @@ jobs:
           - os: macos-latest
             sdk: beta
     steps:
-        - uses: cedx/setup-dart@v2
-          with:
-            release-channel: ${{ matrix.sdk }}
-        - uses: actions/checkout@v2
-        - run: pub get
-        # Keeps hanging
-        # - name: Test on Dart VM and collect code coverage
-        #   run: pub run test_coverage
-        - name: Test
-          run: pub run test
-        - uses: codecov/codecov-action@v1
-        - name: Test on Chrome
-          run: pub run test -p chrome test/*
-        - run: dartanalyzer --fatal-warnings ./
-        - run: dartfmt -n --set-exit-if-changed ./
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - uses: actions/checkout@v2
+      - run: dart pub get
+      # Keeps hanging
+      # - name: Test on Dart VM and collect code coverage
+      #   run: pub run test_coverage
+      - name: Test
+        run: dart test
+      - uses: codecov/codecov-action@v1
+      - name: Test on Chrome
+        run: dart test -p chrome test/*
+      - run: dart analyze --fatal-warnings ./
+      - run: dart format --output=none --set-exit-if-changed .
   package-analysis:
     runs-on: ubuntu-latest
     steps:
@@ -102,7 +102,7 @@ jobs:
       - uses: docker/setup-buildx-action@v1
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v1 
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
