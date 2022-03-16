@@ -19,10 +19,16 @@ class PubClient {
 
   Client httpClient;
 
-  /// Fetches the packages' score from pub.dev.
-  Future<Metrics> getMetrics(String name) async {
-    final url = Uri.parse(
-        'https://pub.dev/api/packages/${Uri.encodeComponent(name)}/metrics');
+  /// Fetches the combined metrics for a package.
+  Future<Metrics> getMetrics(String packageName) async => _parseMetrics(
+        await _getResponse(packageName, '/metrics'),
+        await _getResponse(packageName, '/publisher'),
+      );
+
+  // Fetches the response from a pub.dev API.
+  Future<String> _getResponse(String packageName, String apiName) async {
+    final url = Uri.parse('https://pub.dev/api/packages/'
+        '${Uri.encodeComponent(packageName)}/$apiName');
     final req = Request('GET', url);
     req.headers['User-Agent'] = 'badges.bar/$version (+$site)';
     final streamedResponse = await httpClient.send(req);
@@ -36,15 +42,21 @@ class PubClient {
       throw 'URL $url fetching returned ${streamedResponse.statusCode}';
     }
 
-    return _parseMetrics(response.body);
+    return response.body;
   }
 
-  Future<Metrics> _parseMetrics(String body) async {
-    if (body == null || body == '') {
-      throw "Can't parse body for Metrics because it's empty.";
+  // Parses the response of the /metrics and /publisher API endpoint.
+  Future<Metrics> _parseMetrics(
+      String metricsBody, String publisherBody) async {
+    if (metricsBody == null ||
+        metricsBody == '' ||
+        publisherBody == null ||
+        publisherBody == '') {
+      throw "Can't parse metadata body because it's empty.";
     }
 
-    final dynamic metrics = jsonDecode(body);
+    final dynamic metrics = jsonDecode(metricsBody);
+    final dynamic publisher = jsonDecode(publisherBody);
 
     final dynamic score = metrics['score'];
     final likes = score['likeCount'] as int;
@@ -67,6 +79,10 @@ class PubClient {
     if (popularity != null) {
       roundedPopularity = (popularity * 100).round();
     }
+
+    var publisherId = publisher['publisherId'] as String;
+    publisherId ??= '';
+
     return Metrics(
       likes: likes,
       points: points,
@@ -80,6 +96,7 @@ class PubClient {
       derivedTags: derivedTags,
       flags: flags,
       reportTypes: reportTypes,
+      publisher: publisherId,
     );
   }
 }
@@ -100,6 +117,7 @@ class Metrics {
     this.derivedTags,
     this.flags,
     this.reportTypes,
+    this.publisher,
   });
 
   /// Package 'Likes'.
@@ -132,6 +150,10 @@ class Metrics {
   /// Time of creation of the latest version of the package in DateTime format
   final DateTime packageVersionCreated;
 
+  /// The verified publisher of the package. If the package was published
+  /// without a verified publisher, this will be set to an empty string.
+  final String publisher;
+
   final List<String> derivedTags;
 
   final List<String> flags;
@@ -161,6 +183,8 @@ class Metrics {
       return popularity.toString();
     } else if (type == scoreTypes[4]) {
       return lastUpdated.toString();
+    } else if (type == scoreTypes[5]) {
+      return publisher;
     } else if (type == scorecardTypes[0]) {
       return packageName;
     } else if (type == scorecardTypes[1]) {
