@@ -7,22 +7,25 @@
 
 https://hub.docker.com/r/brunogarcia/badges.bar/tags
 
-## Using badges.bar
 
-You can create a badge for your package by using `https://badges.bar/{package}/{score_type}`.
-Score types can be either:
+## The service badges.bar is getting decomissioned
 
-* `likes`
-* `pub points`
-* `popularity`
+~## Using badges.bar~
 
-For example for the package `sentry`:
+~You can create a badge for your package by using `https://badges.bar/{package}/{score_type}`.~
+~Score types can be either:~
 
-[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score): `[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score)`
+~* `likes`~
+~* `pub points`~
+~* `popularity`~
 
-[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score): `[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score)`
+~For example for the package `sentry`:~
 
-[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score): `[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score)`
+~[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score): `[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score)`~
+
+~[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score): `[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score)`~
+
+~[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score): `[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score)`~
 
 ## Using the API
 
