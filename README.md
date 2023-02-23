@@ -1,7 +1,6 @@
 # Badges for Dart and Flutter packages
 
 [![build](https://github.com/bruno-garcia/badges.bar/workflows/build/badge.svg?branch=main)](https://github.com/bruno-garcia/badges.bar/actions?query=branch%3Amain) 
-[![likes](https://img.shields.io/pub/likes/sentry?logo=dart)](https://pub.dev/packages/badges_bar/score) [![popularity](https://img.shields.io/pub/popularity/sentry?logo=dart)](https://pub.dev/packages/badges_bar/score) [![pub points](https://img.shields.io/pub/points/sentry?logo=dart)](https://pub.dev/packages/badges_bar/score)
 
 ## On Docker Hub
 
