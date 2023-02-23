@@ -7,26 +7,6 @@
 
 https://hub.docker.com/r/brunogarcia/badges.bar/tags
 
-
-## The service badges.bar is getting decomissioned
-
-~## Using badges.bar~
-
-~You can create a badge for your package by using `https://badges.bar/{package}/{score_type}`.~
-~Score types can be either:~
-
-~* `likes`~
-~* `pub points`~
-~* `popularity`~
-
-~For example for the package `sentry`:~
-
-~[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score): `[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score)`~
-
-~[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score): `[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score)`~
-
-~[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score): `[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score)`~
-
 ## Using the API
 
 ### Render an SVG badge with the Dart logo
@@ -48,3 +28,23 @@ print('Likes: ${score.likes}');
 print('Popularity: ${score.popularity}');
 print('Pub Points: ${score.points}');
 ```
+
+## The service badges.bar was decomissioned
+
+~## Using badges.bar service~
+
+~You can create a badge for your package by using `https://badges.bar/{package}/{score_type}`.~
+~Score types can be either:~
+
+~* `likes`~
+~* `pub points`~
+~* `popularity`~
+
+~For example for the package `sentry`:~
+
+~[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score): `[![likes](https://badges.bar/sentry/likes)](https://pub.dev/packages/sentry/score)`~
+
+~[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score): `[![popularity](https://badges.bar/sentry/popularity)](https://pub.dev/packages/sentry/score)`~
+
+~[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score): `[![pub points](https://badges.bar/sentry/pub%20points)](https://pub.dev/packages/sentry/score)`~
+
